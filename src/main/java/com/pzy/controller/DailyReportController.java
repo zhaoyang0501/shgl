@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin /dailyReport")
 public class DailyReportController {
 	
-	/***
+	/*** 
 	 * @return
 	 */
 	@RequestMapping("b")
