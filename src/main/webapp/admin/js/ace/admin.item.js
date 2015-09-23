@@ -1,8 +1,8 @@
-jQuery.adminUser = {
-		userDataTable:null,
+jQuery.adminItem = {
+		itemDataTable:null,
 		initSearchDataTable : function() {
-			if (this.userDataTable == null) {
-				this.userDataTable = $('#dt_table_view').dataTable({
+			if (this.itemDataTable == null) {
+				this.itemDataTable = $('#dt_table_view').dataTable({
 					"sDom" : "<'row-fluid'<'span6'l>r>t<'row-fluid'<'span6'i><'span6'p>>",
 					"sPaginationType" : "bootstrap",
 					"oLanguage" : {
@@ -26,7 +26,7 @@ jQuery.adminUser = {
 					"sServerMethod" : "GET",
 					"bProcessing" : true,
 					"bSort" : false,
-					"sAjaxSource" : $.ace.getContextPath() + "/admin/user/list",
+					"sAjaxSource" : $.ace.getContextPath() + "/admin/item/list",
 					"fnDrawCallback" : function(oSettings) {
 						$('[rel="popover"],[data-rel="popover"]').popover();
 					},
@@ -34,7 +34,7 @@ jQuery.adminUser = {
 						var name = $("#_name").val();
 						if (!!name) {
 							aoData.push({
-								"name" : "username",
+								"name" : "name",
 								"value" : name
 							});
 						}
@@ -51,34 +51,24 @@ jQuery.adminUser = {
 					"aoColumns" : [ {
 						"mDataProp" : "id"
 					}, {
-						"mDataProp" : "username"
-					}, {
-						"mDataProp" : "password"
-					}, {
 						"mDataProp" : "name"
 					}, {
-						"mDataProp" : "address"
+						"mDataProp" : "count"
 					}, {
-						"mDataProp" : "tel"
-					}, {
-						"mDataProp" : "email"
-					}, {
-						"mDataProp" : "yyzh"
-					}, {
-						"mDataProp" : "manger"
-					}, {
-						"mDataProp" : "level"
+						"mDataProp" : "price"
 					}, {
 						"mDataProp" : "createDate"
+					}, {
+						"mDataProp" : "remark"
 					},{
 						"mDataProp" : ""
 					}],
 					"aoColumnDefs" : [
 						{
-							'aTargets' : [11],
+							'aTargets' : [6],
 							'fnRender' : function(oObj, sVal) {
-								return"  <button class=\"btn2 btn-info\" onclick=\"$.adminUser.deleteUser("+oObj.aData.id+")\"><i class=\"icon-trash\"></i> 删除</button>" +
-								" <button class=\"btn2 btn-info\" onclick=\"$.adminUser.showEdit("+oObj.aData.id+")\"><i class=\"icon-pencil\"></i>修改</button>";
+								return"  <button class=\"btn2 btn-info\" onclick=\"$.adminItem.deleteItem("+oObj.aData.id+")\"><i class=\"icon-trash\"></i> 删除</button>" +
+								" <button class=\"btn2 btn-info\" onclick=\"$.adminItem.showEdit("+oObj.aData.id+")\"><i class=\"icon-pencil\"></i>修改</button>";
 							}
 						},
 					 {
@@ -89,32 +79,32 @@ jQuery.adminUser = {
 
 				});
 			} else {
-				var oSettings = this.userDataTable.fnSettings();
+				var oSettings = this.itemDataTable.fnSettings();
 				oSettings._iDisplayStart = 0;
-				this.userDataTable.fnDraw(oSettings);
+				this.itemDataTable.fnDraw(oSettings);
 			}
 
 		},
-		deleteUser :function(id){
+		deleteItem :function(id){
 			bootbox.confirm( "是否确认删除？", function (result) {
 	            if(result){
 	            	$.ajax({
 	        			type : "get",
-	        			url : $.ace.getContextPath() + "/admin/user/delete/"+id,
+	        			url : $.ace.getContextPath() + "/admin/item/delete/"+id,
 	        			dataType : "json",
 	        			success : function(json) {
 	        				if(json.state=='success'){
-	        					noty({"text":""+ json.msg +"","layout":"top","type":"success","timeout":"2000"});
-	        					$.adminUser.initSearchDataTable();
+	        					noty({"text":""+ json.resultMap.msg +"","layout":"top","type":"success","timeout":"2000"});
+	        					$.adminItem.initSearchDataTable();
 	        				}else{
-	        					noty({"text":""+ json.resultMap.msg +"","layout":"top","type":"warning"});
+	        					noty({"text":""+ json.msg +"","layout":"top","type":"warning"});
 	        				}
 	        			}
 	        		});
 	            }
 	        });
 		},
-		showUserAddModal: function(id){
+		showItemAddModal: function(id){
 			$("#id").val(id);
 			$('#_modal').modal({
 			});
@@ -124,19 +114,14 @@ jQuery.adminUser = {
 			$("#id").val(id);
 			$.ajax({
     			type : "get",
-    			url : $.ace.getContextPath() + "/admin/user/get/"+id,
+    			url : $.ace.getContextPath() + "/admin/item/get/"+id,
     			dataType : "json",
     			success : function(json) {
     				if(json.state=='success'){
     					$("#name").val(json.object.name);
-    					$("#username").val(json.object.username);
-    					$("#password").val(json.object.password);
-    					$("#tel").val(json.object.tel);
-    					$("#email").val(json.object.email);
-    					$("#address").val(json.object.address);
-    					$("#level").val(json.object.level);
-    					$("#manger").val(json.object.manger);
-    					$("#yyzh").val(json.object.yyzh);
+    					$("#count").val(json.object.count);
+    					$("#price").val(json.object.price);
+    					$("#remark").val(json.object.remark);
     				}else{
     					noty({"text":""+ json.msg +"","layout":"top","type":"warning"});
     				}
@@ -145,17 +130,17 @@ jQuery.adminUser = {
 			$("#_modal").modal('show');
 		},
 		
-		saveUser: function(id){
+		saveItem: function(id){
 			$.ajax({
     			type : "post",
-    			url : $.ace.getContextPath() + "/admin/user/save",
+    			url : $.ace.getContextPath() + "/admin/item/save",
     			data:$("form").serialize(),
     			dataType : "json",
     			success : function(json) {
     				if(json.state=='success'){
     					$("#_modal").modal('hide');
     					noty({"text":""+ json.msg +"","layout":"top","type":"success","timeout":"2000"});
-    					$.adminUser.initSearchDataTable();
+    					$.adminItem.initSearchDataTable();
     				}else{
     					noty({"text":""+ json.msg +"","layout":"top","type":"warning"});
     				}
