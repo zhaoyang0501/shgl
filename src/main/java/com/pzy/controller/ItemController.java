@@ -29,7 +29,7 @@ public class ItemController {
 	public String index() {
 		return "admin/item/index";
 	}
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> list(
 			@RequestParam(value = "sEcho", defaultValue = "1") int sEcho,

@@ -39,7 +39,7 @@
 					<div class="span12">
 						<div class="content-widgets light-gray">
 							<div class="widget-head  bondi-blue" >
-								<h3>XXXX</h3>
+								<h3>商户管理</h3>
 							</div>
 							<div class="box well form-inline">
 								<span>用户名：</span>

@@ -23,7 +23,7 @@ jQuery.adminContract = {
 					"iDisplayLength" : 10,
 					"aLengthMenu" : [ 5, 10, 25, 50],
 					"bServerSide" : true,
-					"sServerMethod" : "GET",
+					"sServerMethod" : "POST",
 					"bProcessing" : true,
 					"bSort" : false,
 					"sAjaxSource" : $.ace.getContextPath() + "/admin/contract/list",
@@ -34,13 +34,13 @@ jQuery.adminContract = {
 						var name = $("#_name").val();
 						if (!!name) {
 							aoData.push({
-								"name" : "name",
+								"name" : "contractname",
 								"value" : name
 							});
 						}
 						$.ajax({
 							"dataType" : 'json',
-							"type" : "GET",
+							"type" : "POST",
 							"url" : sSource,
 							"data" : aoData,
 							"success" : function(data){
@@ -118,10 +118,9 @@ jQuery.adminContract = {
     			dataType : "json",
     			success : function(json) {
     				if(json.state=='success'){
-    					$("#name").val(json.object.name);
-    					$("#count").val(json.object.count);
-    					$("#price").val(json.object.price);
-    					$("#remark").val(json.object.remark);
+    					$("#title").val(json.object.title);
+    					$("#start").val(json.object.start);
+    					$("#end").val(json.object.end);
     				}else{
     					noty({"text":""+ json.msg +"","layout":"top","type":"warning"});
     				}
@@ -133,7 +132,7 @@ jQuery.adminContract = {
 		saveContract: function(id){
 			$.ajax({
     			type : "post",
-    			url : $.ace.getContextPath() + "/admin/contract/save",
+    			url : $.ace.getContextPath() + "/admin/contract/update",
     			data:$("form").serialize(),
     			dataType : "json",
     			success : function(json) {

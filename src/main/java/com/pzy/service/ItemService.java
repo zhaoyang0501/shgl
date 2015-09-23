@@ -23,6 +23,9 @@ public class ItemService {
 	@Autowired
 	private ItemRepository itemRepository;
 	
+	public List<Item> findAll(){
+		return (List<Item> )itemRepository.findAll();
+	}
 	
 	public Page<Item> findAll(final int pageNumber, final int pageSize,
 			final String name) {
