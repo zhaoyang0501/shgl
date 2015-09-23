@@ -3050,4 +3050,6 @@ position:relative;
 }
 }
 
-
+.modal-footer {
+text-align: center;
+}

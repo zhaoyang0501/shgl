@@ -10,6 +10,9 @@
 <script src="${pageContext.request.contextPath}/admin/js/falgun/bootstrap-datetimepicker.zh-CN.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		if("${tip}" != null && "${tip}" != ""){
+			noty({"text":"${tip}","layout":"top","type":"success","timeout":"2000"});
+		}
 		$(".date").datetimepicker({
 			language:  'zh-CN',
 	        weekStart: 1,
@@ -39,7 +42,7 @@
 					<div class="span12">
 						<div class="content-widgets ">
 							<div class="widget-head  bondi-blue" >
-								<h3>XXXX</h3>
+								<h3>我的合同</h3>
 							</div>
 							
 							
@@ -62,15 +65,16 @@
 										</tr>
 									</thead>
 									<tbody>
-									<tr>
+									
 									<c:forEach items="${signed }" var="bean">
+									<tr>
 										<td>${bean.id}</td>
 										<td>${bean.contract.title}</td>
 										<td>${bean.contract.start}</td>
 										<td>${bean.contract.end}</td>
-										<td>${bean.contract.signDate}</td>
+										<td>${bean.signDate}</td>
+										</tr>
 									</c:forEach>
-									</tr>
 									</tbody>
 								</table>
 							</div>
@@ -84,24 +88,21 @@
 											<th>合同终止日期</th>
 											<th>签订</th>
 										</tr>
-										<tbody>
-									<tr>
+									</thead>
 									<c:forEach items="${notsign }" var="bean">
+									<tr>
 										<td>${bean.title}</td>
 										<td>${bean.start}</td>
 										<td>${bean.end}</td>
-										<td></td>
+										<td><a href="mycontract/sign/${bean.id}">签订</a></td>
+										</tr>
 									</c:forEach>
-									</tr>
 									</tbody>
-									</thead>
 								</table>
 							</div>
 						</div>
 					</div>
 				</div>
-							
-							
 						</div>
 					</div>
 				</div>

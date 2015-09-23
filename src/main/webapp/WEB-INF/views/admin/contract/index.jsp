@@ -39,10 +39,10 @@
 					<div class="span12">
 						<div class="content-widgets light-gray">
 							<div class="widget-head  bondi-blue" >
-								<h3>XXXX</h3>
+								<h3>合同管理</h3>
 							</div>
 							<div class="box well form-inline">
-								<span>用户名：</span>
+								<span>合同名称：</span>
 								<input type="text" id="_name" >
 								<a onclick="$.adminContract.initSearchDataTable()"
 									class="btn btn-info" data-loading-text="正在加载..."><i class="icon-search"></i>查询</a>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.pzy.entity.Contract;
 import com.pzy.service.ContractService;
@@ -46,7 +47,11 @@ public class ContractController {
 	public String index() {
 		return "admin/contract/index";
 	}
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@RequestMapping("create")
+	public String create() {
+		return "admin/contract/create";
+	}
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Object> list(
 			@RequestParam(value = "sEcho", defaultValue = "1") int sEcho,
@@ -64,20 +69,19 @@ public class ContractController {
 		return map;
 	}
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> save(Contract contract) {
+	public ModelAndView save(Contract contract) {
 		contract.setCreateDate(new Date());
 		contractService.save(contract);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("state", "success");
-		map.put("msg", "保存成功");
-		return map;
+		ModelAndView mv=new ModelAndView("admin/contract/create");
+		mv.addObject("state", "success");
+		mv.addObject("msg", "保存成功");
+		return mv;
 	}
 	@RequestMapping(value = "/update")
 	@ResponseBody
 	public Map<String, Object> update(Contract contract) {
 		Contract bean=contractService.find(contract.getId());
-		bean.setTitle(contract.getContext());
+		bean.setTitle(contract.getTitle());
 		bean.setEnd(contract.getEnd());
 		bean.setStart(contract.getStart());
 		contractService.save(bean);

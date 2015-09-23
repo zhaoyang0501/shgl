@@ -34,7 +34,7 @@ public class UserService {
                     public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
                     Predicate predicate = cb.conjunction();
                     if (userName != null) {
-                         predicate.getExpressions().add(cb.like(root.get("userName").as(String.class), userName+"%"));
+                         predicate.getExpressions().add(cb.like(root.get("name").as(String.class), userName+"%"));
                     }
                     return predicate;
                     }
@@ -51,8 +51,8 @@ public class UserService {
      public void save(User User){
     	 userRepository.save(User);
      }
-     public User login(String id,String password){
-    	 List<User> users=userRepository.findByIdAndPassword(id,password);
-    	 return users.size()==0?null:users.get(0);
+     public User login(String adminUserName,String password){
+    	 List<User> adminUsers=userRepository.findByUsernameAndPassword(adminUserName,password);
+    	 return adminUsers.size()==0?null:adminUsers.get(0);
      }
 }

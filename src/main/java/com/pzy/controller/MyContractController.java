@@ -1,11 +1,15 @@
 package com.pzy.controller;
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.pzy.entity.Contract;
 import com.pzy.entity.Sign;
 import com.pzy.entity.User;
 import com.pzy.service.ContractService;
@@ -25,23 +29,24 @@ public class MyContractController {
 	@Autowired
 	private SignService signService;
 	@RequestMapping("index")
-	public ModelAndView index() {
-		User user=userService.find(1L);
+	public ModelAndView index(HttpSession httpSession) {
+		User user=(User)httpSession.getAttribute("adminUser");
 		ModelAndView mv=new ModelAndView("admin/mycontract/index");
 		mv.addObject("signed", contractService.findSigned(user));
 		mv.addObject("notsign", contractService.findNotSign(user));
 		return mv;
 	}
 	@RequestMapping("sign/{id}")
-	public ModelAndView sign(Long id) {
-		User user=userService.find(1L);
-		
+	public ModelAndView sign(@PathVariable Long id,HttpSession httpSession) {
+		User user=(User)httpSession.getAttribute("adminuser");
 		Sign sign=new Sign();
 		sign.setUser(user);
-		sign.setContract(contractService.find(id));
+		Contract contract=contractService.find(id);
+		sign.setContract(contract);
 		sign.setSignDate(new Date());
 		signService.save(sign);
 		ModelAndView mv=new ModelAndView("admin/mycontract/index");
+		mv.addObject("tip","合同签订成功！");
 		mv.addObject("signed", contractService.findSigned(user));
 		mv.addObject("notsign", contractService.findNotSign(user));
 		return mv;

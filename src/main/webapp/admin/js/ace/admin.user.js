@@ -23,7 +23,7 @@ jQuery.adminUser = {
 					"iDisplayLength" : 10,
 					"aLengthMenu" : [ 5, 10, 25, 50],
 					"bServerSide" : true,
-					"sServerMethod" : "GET",
+					"sServerMethod" : "POST",
 					"bProcessing" : true,
 					"bSort" : false,
 					"sAjaxSource" : $.ace.getContextPath() + "/admin/user/list",
@@ -40,7 +40,7 @@ jQuery.adminUser = {
 						}
 						$.ajax({
 							"dataType" : 'json',
-							"type" : "GET",
+							"type" : "POST",
 							"url" : sSource,
 							"data" : aoData,
 							"success" : function(data){
