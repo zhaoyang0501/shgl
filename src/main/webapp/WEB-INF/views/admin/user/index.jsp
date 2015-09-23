@@ -39,10 +39,10 @@
 					<div class="span12">
 						<div class="content-widgets light-gray">
 							<div class="widget-head  bondi-blue" >
-								<h3>学生管理</h3>
+								<h3>XXXX</h3>
 							</div>
 							<div class="box well form-inline">
-								<span>学生姓名：</span>
+								<span>用户名：</span>
 								<input type="text" id="_name" >
 								<a onclick="$.adminUser.initSearchDataTable()"
 									class="btn btn-info" data-loading-text="正在加载..."><i class="icon-search"></i>查询</a>
@@ -54,15 +54,17 @@
 									id="dt_table_view">
 									<thead>
 										<tr>
-											<th >学号</th>
-											<th >姓名</th>
-											<th >地址</th>
-											<th >性别</th>
-											<th >电话</th>
-											<th >班级</th>
-											<th >电子邮件</th>
+											<th >商户ID</th>
+											<th >商户用户名</th>
+											<th >商户密码</th>
+											<th >商户姓名</th>
+											<th >商户地址</th>
+											<th >商户电话</th>
+											<th >商户邮件</th>
+											<th >营业执照</th>
+											<th >法人代表</th>
+											<th >等级</th>
 											<th >加入日期</th>
-											<th >角色</th>
 											<th >操作</th>
 										</tr>
 									</thead>
@@ -89,71 +91,69 @@
 				<div class="span12">
 					<div class="form-container grid-form form-background left-align form-horizontal">
 						<form action="" method="get" id=''>
-							<input type="hidden" id="id" value="">
+							<input type="hidden"  name='id' id="id" value="">
 							
 							<div class="control-group">
-								<label for="title" class="control-label">学号：</label>
+								<label for="title" class="control-label">用户名：</label>
 								<div class="controls">
-									<input type="text" id="userid" placeholder="">
+									<input type="text" name='username' id="username" placeholder="">
 								</div>
 							</div>
 							<div class="control-group">
 								<label for="title" class="control-label">密码：</label>
 								<div class="controls">
-									<input type="text" id="userpassword" placeholder="">
+									<input type="text"  name='password' id="password" placeholder="">
 								</div>
 							</div>
 							<div class="control-group">
 								<label for="title" class="control-label">姓名：</label>
 								<div class="controls">
-									<input type="text" id="username" placeholder="">
+									<input type="text" name='name' id="name" placeholder="">
 								</div>
 							</div>
 							
 							<div class="control-group">
 								<label for="title" class="control-label">地址：</label>
 								<div class="controls">
-									<input type="text" id=useraddress placeholder="">
+									<input type="text" name='address' id=address placeholder="">
 								</div>
 							</div>
 							<div class="control-group">
-								<label for="title" class="control-label">班级：</label>
+								<label for="title" class="control-label">email：</label>
 								<div class="controls">
-									<select id='usergrades'>
-									<c:forEach items="${gradess }" var="bean">
-										<option value="${bean.id }">${bean.name }</option>
-									</c:forEach>
-									
-										
-									</select>
+									<input type="text" name='email' id=email placeholder="">
 								</div>
 							</div>
-							
-							
 							<div class="control-group">
-								<label for="title" class="control-label">性别：</label>
+								<label for="title" class="control-label">法人代表：</label>
 								<div class="controls">
-									<select id='usersex'>
-										<option>男</option>
-										<option>女</option>
-									</select>
+									<input type="text" name='manger' id=manger placeholder="">
 								</div>
 							</div>
 							
 							<div class="control-group">
 								<label for="title" class="control-label">电话：</label>
 								<div class="controls">
-									<input type="text"  id='usertel' placeholder="">
+									<input type="text" name='tel' id=tel placeholder="">
 								</div>
 							</div>
 							
 							<div class="control-group">
-								<label for="title" class="control-label">电子邮件：</label>
+								<label for="title" class="control-label">营业执照：</label>
 								<div class="controls">
-									<input type="text" id="useremail" placeholder="">
+									<input type="text" name='yyzh' id=yyzh placeholder="">
 								</div>
 							</div>
-							
+							<div class="control-group">
+								<label for="title" class="control-label">商户等级：</label>
+								<div class="controls">
+									<select name='level' id='level'>
+										<option  value="一级商户">一级商户</option>
+										<option value="二级商户">二级商户</option>
+										<option value="三级商户">三级商户</option>
+									</select>
+								</div>
+							</div>
 						</form>
 					</div>
 				</div>

@@ -16,8 +16,6 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.pzy.entity.Grades;
-import com.pzy.entity.Notice;
 import com.pzy.entity.User;
 import com.pzy.repository.UserRepository;
 
@@ -28,12 +26,6 @@ public class UserService {
      public List<User> findAll() {
           return (List<User>) userRepository.findAll();
      }
-     public List<User> findByNews(Grades grades){
-  		return userRepository.findByGradesOrderByCreateDateDesc(grades);
-  	}
-     public List<User> findByGrades(Grades grades){
- 		return userRepository.findByGrades(grades);
- 	}
      public Page<User> findAll(final int pageNumber, final int pageSize,final String userName){
                PageRequest pageRequest = new PageRequest(pageNumber - 1, pageSize, new Sort(Direction.DESC, "id"));
               
@@ -50,10 +42,10 @@ public class UserService {
                Page<User> result = (Page<User>) userRepository.findAll(spec, pageRequest);
                return result;
      }
-     public void delete(String id){
+     public void delete(Long id){
           userRepository.delete(id);
      }
-     public User find(String id){
+     public User find(Long id){
     	  return userRepository.findOne(id);
      }
      public void save(User User){

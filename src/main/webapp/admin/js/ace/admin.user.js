@@ -23,7 +23,7 @@ jQuery.adminUser = {
 					"iDisplayLength" : 10,
 					"aLengthMenu" : [ 5, 10, 25, 50],
 					"bServerSide" : true,
-					"sServerMethod" : "POST",
+					"sServerMethod" : "GET",
 					"bProcessing" : true,
 					"bSort" : false,
 					"sAjaxSource" : $.ace.getContextPath() + "/admin/user/list",
@@ -31,50 +31,54 @@ jQuery.adminUser = {
 						$('[rel="popover"],[data-rel="popover"]').popover();
 					},
 					"fnServerData" : function(sSource, aoData, fnCallback) {
-						var userName = $("#_userName").val();
-						if (!!userName) {
+						var name = $("#_name").val();
+						if (!!name) {
 							aoData.push({
-								"name" : "userName",
-								"value" : userName
+								"name" : "username",
+								"value" : name
 							});
 						}
 						$.ajax({
 							"dataType" : 'json',
-							"type" : "POST",
+							"type" : "GET",
 							"url" : sSource,
 							"data" : aoData,
 							"success" : function(data){
-								fnCallback(data.resultMap);
+								fnCallback(data);
 							}
 						});
 					},
 					"aoColumns" : [ {
 						"mDataProp" : "id"
 					}, {
-						"mDataProp" : "name"
+						"mDataProp" : "username"
 					}, {
 						"mDataProp" : "password"
+					}, {
+						"mDataProp" : "name"
 					}, {
 						"mDataProp" : "address"
 					}, {
 						"mDataProp" : "tel"
 					}, {
-						"mDataProp" : "grades.name"
-					}, {
 						"mDataProp" : "email"
 					}, {
-						"mDataProp" : "createDate"
+						"mDataProp" : "yyzh"
 					}, {
-						"mDataProp" : "role"
+						"mDataProp" : "manger"
+					}, {
+						"mDataProp" : "level"
+					}, {
+						"mDataProp" : "createDate"
 					},{
 						"mDataProp" : ""
 					}],
 					"aoColumnDefs" : [
 						{
-							'aTargets' : [9],
+							'aTargets' : [11],
 							'fnRender' : function(oObj, sVal) {
 								return"  <button class=\"btn2 btn-info\" onclick=\"$.adminUser.deleteUser("+oObj.aData.id+")\"><i class=\"icon-trash\"></i> 删除</button>" +
-								" <button class=\"btn2 btn-info\" onclick=\"$.adminUser.setLead("+oObj.aData.id+")\"><i class=\"icon-pencil\"></i>设为班长</button>";
+								" <button class=\"btn2 btn-info\" onclick=\"$.adminUser.showEdit("+oObj.aData.id+")\"><i class=\"icon-pencil\"></i>修改</button>";
 							}
 						},
 					 {
@@ -96,7 +100,7 @@ jQuery.adminUser = {
 	            if(result){
 	            	$.ajax({
 	        			type : "get",
-	        			url : $.ace.getContextPath() + "/admin/user/delete?id="+id,
+	        			url : $.ace.getContextPath() + "/admin/user/delete/"+id,
 	        			dataType : "json",
 	        			success : function(json) {
 	        				if(json.resultMap.state=='success'){
@@ -111,7 +115,7 @@ jQuery.adminUser = {
 	        });
 		},
 		showUserAddModal: function(id){
-			$("#userid").val(id);
+			$("#id").val(id);
 			$('#_modal').modal({
 			});
 			$("#_modal").modal('show');
@@ -120,61 +124,36 @@ jQuery.adminUser = {
 			$("#userid").val(id);
 			$.ajax({
     			type : "get",
-    			url : $.ace.getContextPath() + "/admin/user/get?id="+id,
+    			url : $.ace.getContextPath() + "/admin/user/get/"+id,
     			dataType : "json",
     			success : function(json) {
-    				if(json.resultMap.state=='success'){
-    					$("#name").val(json.resultMap.user.name);
-    					$("#nickname").val(json.resultMap.user.nickname);
-    					$("#email").val(json.resultMap.user.email);
-    					$("#password").val(json.resultMap.user.password);
-    					$("#sex").val(json.resultMap.user.sex);
-    					$("#job").val(json.resultMap.user.job);
+    				if(json.state=='success'){
+    					$("#name").val(json.object.name);
+    					$("#username").val(json.object.username);
+    					$("#password").val(json.object.password);
+    					$("#tel").val(json.object.tel);
+    					$("#email").val(json.object.email);
+    					$("#address").val(json.object.address);
+    					$("#level").val(json.object.level);
+    					$("#manger").val(json.object.manger);
+    					$("#yyzh").val(json.object.yyzh);
     				}else{
     					noty({"text":""+ json.resultMap.msg +"","layout":"top","type":"warning"});
     				}
     			}
     		});
-			$("#user_edit_modal").modal('show');
+			$("#_modal").modal('show');
 		},
 		
 		saveUser: function(id){
 			$.ajax({
     			type : "post",
     			url : $.ace.getContextPath() + "/admin/user/save",
-    			data:{
-    				"user.id":$("#userid").val(),
-    				"user.name":$("#username").val(),
-    				"user.password":$("#userpassword").val(),
-    				"user.address":$("#useraddress").val(),
-    				"user.grades.id":$("#usergrades").val(),
-    				"user.sex":$("#usersex").val(),
-    				"user.tel":$("#usertel").val(),
-    				"user.email":$("#useremail").val()
-    			},
+    			data:$("form").serialize(),
     			dataType : "json",
     			success : function(json) {
     				if(json.resultMap.state=='success'){
-    					$("#user_edit_modal").modal('hide');
-    					noty({"text":""+ json.resultMap.msg +"","layout":"top","type":"success","timeout":"2000"});
-    					$.adminUser.initSearchDataTable();
-    				}else{
-    					noty({"text":""+ json.resultMap.msg +"","layout":"top","type":"warning"});
-    				}
-    			}
-    		});
-		},
-		setLead: function(id){
-			$.ajax({
-    			type : "post",
-    			url : $.ace.getContextPath() + "/admin/user/setLead",
-    			data:{
-    				"user.id":id
-    			},
-    			dataType : "json",
-    			success : function(json) {
-    				if(json.resultMap.state=='success'){
-    					$("#user_edit_modal").modal('hide');
+    					$("#_modal").modal('hide');
     					noty({"text":""+ json.resultMap.msg +"","layout":"top","type":"success","timeout":"2000"});
     					$.adminUser.initSearchDataTable();
     				}else{
@@ -183,4 +162,5 @@ jQuery.adminUser = {
     			}
     		});
 		}
+		
 };
