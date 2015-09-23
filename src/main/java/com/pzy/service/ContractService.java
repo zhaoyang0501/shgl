@@ -17,26 +17,30 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.pzy.entity.News;
-import com.pzy.repository.NewsRepository;
+import com.pzy.entity.Contract;
+import com.pzy.entity.Sign;
+import com.pzy.entity.User;
+import com.pzy.repository.ContractRepository;
 
 @Service
-public class NewsService {
+public class ContractService {
      @Autowired
-     private NewsRepository newsRepository;
-
- 	public List<News> findTop3() {
- 		return newsRepository.findAll(
- 				new PageRequest(0, 3, new Sort(Direction.DESC, "createDate")))
- 				.getContent();
- 	}
-     public List<News> findAll() {
-         return (List<News>) newsRepository.findAll();
+     private ContractRepository contractRepository;
+    
+     public List<Contract> findNotSign(User user){
+    	 return this.contractRepository.findNotSign(user);
      }
-     public Page<News> findAll(final int pageNumber, final int pageSize,final String name){
+ 	 public List<Sign> findSigned(User user){
+ 		 return this.contractRepository.findSigned(user);
+ 	 }
+ 	
+     public List<Contract> findAll() {
+         return (List<Contract>) contractRepository.findAll();
+     }
+     public Page<Contract> findAll(final int pageNumber, final int pageSize,final String name){
          PageRequest pageRequest = new PageRequest(pageNumber - 1, pageSize, new Sort(Direction.DESC, "id"));
-         Specification<News> spec = new Specification<News>() {
-              public Predicate toPredicate(Root<News> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+         Specification<Contract> spec = new Specification<Contract>() {
+              public Predicate toPredicate(Root<Contract> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
               Predicate predicate = cb.conjunction();
               if (name != null) {
                    predicate.getExpressions().add(cb.like(root.get("name").as(String.class), "%"+name+"%"));
@@ -44,14 +48,14 @@ public class NewsService {
               return predicate;
               }
          };
-         Page<News> result = (Page<News>) newsRepository.findAll(spec, pageRequest);
+         Page<Contract> result = (Page<Contract>) contractRepository.findAll(spec, pageRequest);
          return result;
      	}
      
-     public Page<News> findAll(final int pageNumber, final int pageSize,final Date start,final Date end){
+     public Page<Contract> findAll(final int pageNumber, final int pageSize,final Date start,final Date end){
          PageRequest pageRequest = new PageRequest(pageNumber - 1, pageSize, new Sort(Direction.DESC, "id"));
-         Specification<News> spec = new Specification<News>() {
-              public Predicate toPredicate(Root<News> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+         Specification<Contract> spec = new Specification<Contract>() {
+              public Predicate toPredicate(Root<Contract> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
               Predicate predicate = cb.conjunction();
               if (start != null) {
                   predicate.getExpressions().add(cb.greaterThan(root.get("createDate").as(Date.class),start));
@@ -62,16 +66,16 @@ public class NewsService {
               return predicate;
               }
          };
-         Page<News> result = (Page<News>) newsRepository.findAll(spec, pageRequest);
+         Page<Contract> result = (Page<Contract>) contractRepository.findAll(spec, pageRequest);
          return result;
      	}
 		public void delete(Long id){
-			newsRepository.delete(id);
+			contractRepository.delete(id);
 		}
-		public News find(Long id){
-			  return newsRepository.findOne(id);
+		public Contract find(Long id){
+			  return contractRepository.findOne(id);
 		}
-		public void save(News news){
-			newsRepository.save(news);
+		public void save(Contract contract){
+			contractRepository.save(contract);
 		}
 }
